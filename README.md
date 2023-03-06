@@ -15,8 +15,44 @@ A Well rounded c++ Logging solution
 
 ## Usage
 
-Initialize the logger by:
+### Initialize the logger by calling:
+```cpp
+Loggeru::Initialize();
+```
 
-Log Messages by:
+### Enable file logging by calling:
+```cpp
+Loggeru::StartFileLogging();
+```
+> **Note** <br>
+> default filename: `Log_{day}_{month}_{year}_{hours}_{minutes}_{seconds}.log` <br>
+OR 
+```cpp
+Loggeru::StartFileLogging("filename.log");
+```
 
-Cleanup the logger by:
+### Stop file logging by calling:
+```cpp
+Loggeru::StopFileLogging();
+```
+
+### Log Messages by using macros:
+```cpp
+LOG_DEBUG("My debug message");
+LOG_INFO("My info message");
+LOG_WARNING("My warning message");
+LOG_ERROR("My error message");
+LOG_CRITICAL("My critical error message");
+```
+
+Or use formatted equivalents by adding `_`<br>
+eg. 
+```cpp
+std::string filepath = "some bad file path";
+LOG_CRITICAL_("Tried loading config file but file at path {} could not be found", filepath);
+```
+
+Cleanup the logger by calling:
+```cpp
+Loggeru::Release();
+```
