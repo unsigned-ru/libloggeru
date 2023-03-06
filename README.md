@@ -13,8 +13,18 @@ A Well rounded c++ Logging solution
 > 
 > **For Linux** it expects these libraries to be installed on a system level using a package manager such as `apt`
 
-## Usage
+## Installation
+1. clone repo
+2. configure project `cmake .`
+3. build project `mkdir out && cd out && cmake --build .`
+5. install project `cmake --install .`
 
+> **Warning**
+> 
+> **For windows** it will use (vcpkg)[https://vcpkg.io/en/index.html] and install to the vcpkg directories. <br>
+> **For Linux** it will install to the default system install location.
+
+## Usage
 ### Initialize the logger by calling:
 ```cpp
 Loggeru::Initialize();
