@@ -2,13 +2,13 @@
 A Well rounded c++ Logging solution
 
 ## system dependencies
-- (fmt)[https://github.com/fmtlib/fmt]
+- [fmt](https://github.com/fmtlib/fmt)
 - std++17 or higher. 
-- [**WINDOWS ONLY**] (vcpkg)[https://vcpkg.io/en/index.html]
+- [**WINDOWS ONLY**] [vcpkg](https://vcpkg.io/en/index.html)
 
 > **Warning**
 > 
-> **For windows** it will use `vcpkg` to find it's dependencies. 
+> **For windows** it will use [vcpkg](https://vcpkg.io/en/index.html) to find it's dependencies. 
 > If you do not have `vcpkg` installed in the default install location (`C:/Program Files (x86)/vcpkg`), <br>
 > then you can specify it's path during cmake configuration step with the `--DVCPKG_PATH=<path_to_vcpkg_root>` variable
 > 
