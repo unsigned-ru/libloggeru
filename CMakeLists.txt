@@ -1,6 +1,9 @@
 ﻿cmake_minimum_required(VERSION 3.19)
-set(PROJECT_NAME "loggeru")
+set(PROJECT_NAME "libloggeru")
 project(${PROJECT_NAME} LANGUAGES CXX VERSION 1.0.0)
+
+#stop cmake from prepending
+set(CMAKE_STATIC_LIBRARY_PREFIX "") 
 
 #################
 ## VCPKG SETUP ##
@@ -43,7 +46,7 @@ add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE 
 	"src"
 	"include"
-	${VCPKG_PATH}/installed/${ARCHITECTURE}-windows/include,
+	$<$<NOT:$<STREQUAL:${VCPKG_PATH}, OFF>>:${VCPKG_PATH}/installed/${ARCHITECTURE}-windows/include>,
 )
 
 ##########
