@@ -1,4 +1,4 @@
-# loggeru
+# lib-loggeru
 A Well rounded c++ Logging solution
 
 ## system dependencies
