@@ -16,7 +16,7 @@ A Well rounded c++ Logging solution
 
 ## Installation
 1. clone repo
-2. configure project `mkdir out && cd out && cmake .`
+2. configure project `mkdir out && cd out && cmake ..`
 3. build project `cmake --build .`
 5. install project `cmake --install .`
 
