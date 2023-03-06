@@ -25,7 +25,8 @@ Loggeru::Initialize();
 Loggeru::StartFileLogging();
 ```
 > **Note** <br>
-> default filename: `Log_{day}_{month}_{year}_{hours}_{minutes}_{seconds}.log` <br>
+> default filename: `Log_{day}_{month}_{year}_{hours}_{minutes}_{seconds}.log`
+
 OR 
 ```cpp
 Loggeru::StartFileLogging("filename.log");
@@ -52,7 +53,7 @@ std::string filepath = "some bad file path";
 LOG_CRITICAL_("Tried loading config file but file at path {} could not be found", filepath);
 ```
 
-Cleanup the logger by calling:
+## Cleanup the logger by calling:
 ```cpp
 Loggeru::Release();
 ```
