@@ -53,7 +53,7 @@ std::string filepath = "some bad file path";
 LOG_CRITICAL_("Tried loading config file but file at path {} could not be found", filepath);
 ```
 
-## Cleanup the logger by calling:
+### Cleanup the logger by calling:
 ```cpp
 Loggeru::Release();
 ```
