@@ -67,6 +67,13 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 ## Installation ##
 ##################
 
+include(CMakePackageConfigHelpers)
+	write_basic_package_version_file(
+		"${PROJECT_NAME}ConfigVersion.cmake"
+		VERSION ${${PROJECT_NAME}_VERSION}
+		COMPATIBILITY AnyNewerVersion
+	)
+
 if (WIN32)
 	if (NOT EXISTS ${VCPKG_PATH})
 		message(FATAL_ERROR "Failed to find VCPKG location to install to, CMake will exit." )
@@ -81,15 +88,9 @@ if (WIN32)
 			INCLUDES DESTINATION ${VCPKG_PATH}/installed/${ARCHITECTURE}-windows/include
 	)
 
-	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" @ONLY)
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}-vcpkg.pc.in" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" @ONLY)
 	install(FILES "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION "${VCPKG_PATH}/installed/${ARCHITECTURE}-windows/lib/pkgconfig")
 
-	include(CMakePackageConfigHelpers)
-	write_basic_package_version_file(
-		"${PROJECT_NAME}ConfigVersion.cmake"
-		VERSION ${${PROJECT_NAME}_VERSION}
-		COMPATIBILITY AnyNewerVersion
-	)
 
 	install(EXPORT ${PROJECT_NAME}Targets
 		FILE ${PROJECT_NAME}Targets.cmake
@@ -103,10 +104,26 @@ if (WIN32)
 else()
 	# Installation
 	include(GNUInstallDirs)
-	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-	message("Library install directory at ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-	install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-	message("Include files install directory at ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+
+	install(TARGETS ${PROJECT_NAME} 
+		EXPORT ${PROJECT_NAME}Targets
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+	)
+
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" @ONLY)
+	install(FILES "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+
+	install(EXPORT ${PROJECT_NAME}Targets
+		FILE ${PROJECT_NAME}Targets.cmake
+		NAMESPACE loggeru::loggeru
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+
+	install(FILES "cmake/${PROJECT_NAME}Config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+	)
+
 endif()
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
