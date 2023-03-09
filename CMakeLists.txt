@@ -3,7 +3,7 @@ set(PROJECT_NAME "libloggeru")
 project(${PROJECT_NAME} LANGUAGES CXX VERSION 1.0.0)
 
 #stop cmake from prepending
-set(CMAKE_STATIC_LIBRARY_PREFIX "") 
+set(CMAKE_SHARED_LIBRARY_PREFIX "") 
 
 #################
 ## VCPKG SETUP ##
@@ -37,7 +37,8 @@ endif()
 ###########################
 ## Create Library Target ##
 ###########################
-add_library(${PROJECT_NAME} STATIC)
+add_library(${PROJECT_NAME} SHARED)
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 ###################
 ## Project Files ##
@@ -81,10 +82,11 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 ##################
 
 include(CMakePackageConfigHelpers)
-	write_basic_package_version_file(
-		"${PROJECT_NAME}-config-version.cmake"
-		VERSION ${${PROJECT_NAME}_VERSION}
-		COMPATIBILITY AnyNewerVersion
+
+write_basic_package_version_file(
+	"${PROJECT_NAME}-config-version.cmake"
+	VERSION ${${PROJECT_NAME}_VERSION}
+	COMPATIBILITY AnyNewerVersion
 )
 
 if (WIN32)
@@ -113,23 +115,25 @@ if (WIN32)
 	)
 
 else()
+	include(GNUInstallDirs)
+
 	install(TARGETS ${PROJECT_NAME} 
 		EXPORT ${PROJECT_NAME}-targets
-			LIBRARY DESTINATION "${CMAKE_INSTALL_DIR}/lib"
-			ARCHIVE DESTINATION "${CMAKE_INSTALL_DIR}/lib"
-			FILE_SET HEADERS DESTINATION "${CMAKE_INSTALL_DIR}/include"
+			LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+			ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+			FILE_SET HEADERS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
 
 	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" @ONLY)
-	install(FILES "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION "${CMAKE_INSTALL_DIR}/lib/pkgconfig")
+	install(FILES "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 
 	install(EXPORT ${PROJECT_NAME}-targets
 		FILE ${PROJECT_NAME}-targets.cmake
-		NAMESPACE libloggeru::
-		DESTINATION "${CMAKE_INSTALL_DIR}/share/${PROJECT_NAME}")
+		NAMESPACE ${PROJECT_NAME}::
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
 	install(FILES "cmake/${PROJECT_NAME}-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
-		DESTINATION "${CMAKE_INSTALL_DIR}/share/${PROJECT_NAME}"
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 	)
 
 endif()
