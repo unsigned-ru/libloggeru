@@ -1,9 +1,12 @@
-﻿cmake_minimum_required(VERSION 3.19)
+﻿cmake_minimum_required(VERSION 3.23)
 set(PROJECT_NAME "libloggeru")
 project(${PROJECT_NAME} LANGUAGES CXX VERSION 1.0.0)
 
 #stop cmake from prepending
 set(CMAKE_SHARED_LIBRARY_PREFIX "") 
+
+#build type option
+set(LIBRARY_BUILD_TYPE "SHARED" CACHE STRING "STATIC/SHARED")
 
 #################
 ## VCPKG SETUP ##
@@ -11,7 +14,7 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 if (WIN32)	
 	# If we are on a Windows based system, we should use VCPKG!
 	option(VCPKG_PATH "Path to root folder of VCPKG")
-		
+
 	#check if a custom vpckg path was provided
 	if (${VCPKG_PATH} STREQUAL OFF)
 		set(VCPKG_PATH "C:/Program Files (x86)/vcpkg") #if not, set a default path
@@ -37,8 +40,9 @@ endif()
 ###########################
 ## Create Library Target ##
 ###########################
-add_library(${PROJECT_NAME} SHARED)
+add_library(${PROJECT_NAME} ${LIBRARY_BUILD_TYPE})
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+message("Library build type: ${LIBRARY_BUILD_TYPE}")
 
 ###################
 ## Project Files ##
@@ -135,7 +139,6 @@ else()
 	install(FILES "cmake/${PROJECT_NAME}-config.cmake" "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
 		DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 	)
-
 endif()
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
