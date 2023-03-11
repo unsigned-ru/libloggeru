@@ -17,7 +17,7 @@ A well rounded c++ Logging solution
 ## Installation
 ### 1. Clone repo
 ```
-git clone https://github.com/HaiKhuu-Trading/libhaikhuu-ipc.git
+git clone https://github.com/unsigned-ru/libloggeru.git
 ```
 ### 2. Configure project
 ```
