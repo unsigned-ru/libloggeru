@@ -15,15 +15,19 @@ A Well rounded c++ Logging solution
 > **For Linux** it expects these libraries to be installed on a system level using a package manager such as `apt`
 
 ## Installation
-1. clone repo
-2. configure project `mkdir out && cd out && cmake ..`
+1. Clone repo
+2. Configure project `mkdir out && cd out && cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DVCPKG_PATH="<non-default path to VCPKG>"`
 3. build project `cmake --build .`
 5. install project `cmake --install .`
 
 > **Warning**
 > 
-> **For windows** it will use (vcpkg)[https://vcpkg.io/en/index.html] and install to the vcpkg directories. <br>
-> **For Linux** it will install to the default system install location.
+> **For windows** the installation location will be in ${VCPKG_PATH}/installed/windows-${ARCHITECTURE}/
+>
+> **For UNIX** the installation location will be in the default platform library installtion location.
+
+## Coding standard
+The library follows a near-identical coding standard to [dpp's coding standards](https://dpp.dev/coding-standards.html)
 
 ## Usage
 ### Initialize the logger by calling:
@@ -54,7 +58,7 @@ LOG_DEBUG("My debug message");
 LOG_INFO("My info message");
 LOG_WARNING("My warning message");
 LOG_ERROR("My error message");
-LOG_CRITICAL("My critical error message");
+LOG_CRITICAL("My critical error message"); //Will throw std::exception&
 ```
 
 Or use formatted equivalents by adding `_`<br>
