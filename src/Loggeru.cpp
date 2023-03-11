@@ -1,5 +1,5 @@
-#include "Logerru.h"
-#include "loggeru/ConsoleColors.h"
+#include "loggeru.h"
+#include "loggeru/console_colors.h"
 
 #include <filesystem>
 #include <fstream>
@@ -7,34 +7,32 @@
 
 namespace fs = std::filesystem;
 
-using namespace loggeru;
 
-Loggeru::ConsoleLogger* Loggeru::m_ConsoleLogger = nullptr;
-Loggeru::FileLogger* Loggeru::m_FileLogger = nullptr;
-bool Loggeru::m_AppendTimestamp = false;
-
+loggeru::logger_t::console_logger_t* loggeru::logger_t::p_console_logger = nullptr;
+loggeru::logger_t::file_logger_t* loggeru::logger_t::p_file_logger = nullptr;
+bool loggeru::logger_t::should_append_timestamp = false;
 
 #define SAFE_DELETE(p) if (p) { delete (p); (p) = nullptr; }
 
-std::map<Loggeru::LogLevel, std::string> Loggeru::m_LevelToStr = {
-	{LogLevel::Debug, "DEBUG"},
-	{LogLevel::Info, "INFO"},
-	{LogLevel::Warning, "WARNING"},
-	{LogLevel::Error, "ERROR"},
-	{LogLevel::Critical, "CRITICAL"}
+std::map<loggeru::logger_t::log_level, std::string> loggeru::logger_t::level_strings = {
+	{ll_debug,		"DEBUG"},
+	{ll_info,		"INFO"},
+	{ll_warning,	"WARNING"},
+	{ll_error,		"ERROR"},
+	{ll_critical,	"CRITICAL"}
 };
 
-std::map<Loggeru::LogLevel, std::string> Loggeru::m_LevelToConsoleStyle = {
-	{LogLevel::Debug, KCYN},
-	{LogLevel::Info, KWHT},
-	{LogLevel::Warning, KYEL},
-	{LogLevel::Error, KRED},
-	{LogLevel::Critical, KRED},
+std::map<loggeru::logger_t::log_level, std::string> loggeru::logger_t::level_color_codes = {
+	{ll_debug,		KCYN},
+	{ll_info,		KWHT},
+	{ll_warning,	KYEL},
+	{ll_error,		KRED},
+	{ll_critical,	KRED},
 };
 
-void Loggeru::BaseLogger::Log(const std::string& message, bool appendTimestamp)
+void loggeru::logger_t::base_logger_t::log(const std::string& message, bool append_timestamp)
 {
-	if (appendTimestamp)
+	if (append_timestamp)
 	{
 		const time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 		tm now;
@@ -45,52 +43,52 @@ void Loggeru::BaseLogger::Log(const std::string& message, bool appendTimestamp)
 		std::ignore = localtime_r(&tt, &now);
 #endif
 
-		const std::string timeStamp = fmt::format("[{:04}-{:02}-{:02} > {:02}:{:02}:{:02}] ", now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec);
-		(*m_os) << timeStamp;
+		const std::string time_stamp = fmt::format("[{:04}-{:02}-{:02} > {:02}:{:02}:{:02}] ", now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec);
+		(*os) << time_stamp;
 	}
 
-	(*m_os) << message;
-	m_os->flush();
+	(*os) << message;
+	os->flush();
 }
 
-Loggeru::FileLogger::FileLogger(std::string fileName)
-	: m_filename(std::move(fileName))
+loggeru::logger_t::file_logger_t::file_logger_t(std::string filename)
+	: filename(std::move(filename))
 {
-	m_os = new std::ofstream(m_filename.c_str());
+	os = new std::ofstream(this->filename.c_str());
 }
 
-Loggeru::FileLogger::~FileLogger()
+loggeru::logger_t::file_logger_t::~file_logger_t()
 {
-	if (m_os)
+	if (os)
 	{
-		auto* of = static_cast<std::ofstream*>(m_os);
+		auto* of = dynamic_cast<std::ofstream*>(os);
 		of->close();
-		delete m_os;
+		delete os;
 	}
 }
 
-Loggeru::ConsoleLogger::ConsoleLogger()
+loggeru::logger_t::console_logger_t::console_logger_t()
 {
-	m_os = &std::cout;
+	os = &std::cout;
 }
 
-void Loggeru::Initialize()
+void loggeru::logger_t::initialize()
 {
-	m_ConsoleLogger = new ConsoleLogger();
+	p_console_logger = new console_logger_t();
 }
 
-void Loggeru::Release()
+void loggeru::logger_t::release()
 {
-	SAFE_DELETE(m_ConsoleLogger);
-	SAFE_DELETE(m_FileLogger);
+	SAFE_DELETE(p_console_logger);
+	SAFE_DELETE(p_file_logger);
 }
 
-void Loggeru::ClearConsole()
+void loggeru::logger_t::clear_console()
 {
 	std::ignore = std::system("cls");
 }
 
-void Loggeru::StartFileLogging()
+void loggeru::logger_t::start_file_logging()
 {
 	const time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	tm time;
@@ -100,52 +98,52 @@ void Loggeru::StartFileLogging()
 	std::ignore = localtime_r(&tt, &time);
 #endif
 
-	StartFileLogging(fmt::format("Log_{:02}-{:02}-{}_{:02}-{:02}-{:02}.log", time.tm_mday, time.tm_mon, time.tm_year, time.tm_hour, time.tm_min, time.tm_sec));
+	start_file_logging(fmt::format("Log_{:02}-{:02}-{}_{:02}-{:02}-{:02}.log", time.tm_mday, time.tm_mon, time.tm_year, time.tm_hour, time.tm_min, time.tm_sec));
 }
 
-void Loggeru::StartFileLogging(const std::string& fileName)
+void loggeru::logger_t::start_file_logging(const std::string& filename)
 {
-	SAFE_DELETE(m_FileLogger);
+	SAFE_DELETE(p_file_logger);
 
-	m_FileLogger = new FileLogger(fileName);
+	p_file_logger = new file_logger_t(filename);
 }
 
-void Loggeru::StopFileLogging()
+void loggeru::logger_t::stop_file_logging()
 {
-	SAFE_DELETE(m_FileLogger);
+	SAFE_DELETE(p_file_logger);
 }
 
-bool Loggeru::ProcessLog(LogLevel level, const LogString& fmt, fmt::format_args args)
+bool loggeru::logger_t::process_log(const log_level level, const log_string_t& fmt, const fmt::format_args args)
 {
 	//Skip Debug message in release build
 #ifdef NDEBUG
-	if (level == LogLevel::Debug) return false;
+	if (level == ll_debug) return false;
 #endif
 
 	//Generate Message
-	std::string logMsg = fmt.format ? fmt::vformat(fmt.message, args) : fmt.message; //DEFAULT FORMATTING
+	std::string log_msg = fmt.format ? fmt::vformat(fmt.message, args) : fmt.message; //DEFAULT FORMATTING
 
 	const auto filename = fs::path(fmt.file).filename().string();
-	const std::string strLevel = m_LevelToStr[level];
+	const std::string level_string = level_strings[level];
 
-	const auto full_log = fmt::format("[{}] > {} (line {}) :: {}\n", strLevel, filename, fmt.line, logMsg);
+	const auto full_log = fmt::format("[{}] > {} (line {}) :: {}\n", level_string, filename, fmt.line, log_msg);
 
 	//Console Log
-	if (m_ConsoleLogger)
+	if (p_console_logger)
 	{
-		const auto colorCode = m_LevelToConsoleStyle[level];
-		const auto color_log = fmt::format("[{}{}{}] > {} (line {}) :: {}\n", colorCode, strLevel, RST, filename, fmt.line, logMsg);
-		m_ConsoleLogger->Log(color_log);
+		const std::string& color_code = level_color_codes[level];
+		const auto color_log = fmt::format("[{}{}{}] > {} (line {}) :: {}\n", color_code, level_string, RST, filename, fmt.line, log_msg);
+		p_console_logger->log(color_log);
 	}
 
 	//File Log
-	if (m_FileLogger)
+	if (p_file_logger)
 	{
-		m_FileLogger->Log(full_log, true);
+		p_file_logger->log(full_log, true);
 	}
 
-	//Show MessageBox
-	if (level == LogLevel::Critical)
+	//throw on critical
+	if (level == ll_critical)
 	{
 		throw std::runtime_error(full_log);
 	}

@@ -49,12 +49,12 @@ message("Library build type: ${LIBRARY_BUILD_TYPE}")
 ###################
 target_sources(${PROJECT_NAME}
     PRIVATE 
-	"src/Loggeru.cpp"
+	"src/loggeru.cpp"
     PUBLIC FILE_SET HEADERS 
 	BASE_DIRS "include"
     FILES 
-	"include/Logerru.h"
-	"include/loggeru/ConsoleColors.h"
+	"include/loggeru.h"
+	"include/loggeru/console_colors.h"
 )
 
 # Add project include dirs
