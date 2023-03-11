@@ -15,10 +15,26 @@ A well rounded c++ Logging solution
 > **For Linux** it expects these libraries to be installed on a system level using a package manager such as `apt`
 
 ## Installation
-1. Clone repo
-2. Configure project `mkdir out && cd out && cmake .. -DCMAKE_BUILD_TYPE=RELEASE (windows only: -DVCPKG_PATH="<non-default path to VCPKG>)"`
-3. build project `cmake --build .`
-5. install project `cmake --install .`
+### 1. Clone repo
+```
+git clone https://github.com/HaiKhuu-Trading/libhaikhuu-ipc.git
+```
+### 2. Configure project
+```
+cd libhaikhuu-ipc && 
+mkdir out &&
+cd out &&
+cmake .. -DCMAKE_BUILD_TYPE=RELEASE (windows only: -DVCPKG_PATH="<non-default path to VCPKG>)"
+```
+### 3. Build project
+```
+cmake --build .
+```
+
+### 4. Install project
+```
+cmake --install .
+```
 
 > **Warning**
 > 
