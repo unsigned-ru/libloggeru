@@ -1,7 +1,7 @@
 # libloggeru
-A Well rounded c++ Logging solution
+A well rounded c++ Logging solution
 
-## system dependencies
+## Library Dependencies (installed as shared libraries on the system)
 - std++20 or higher
 - [fmt](https://github.com/fmtlib/fmt)
 - [**WINDOWS ONLY**] [vcpkg](https://vcpkg.io/en/index.html)
