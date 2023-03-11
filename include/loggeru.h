@@ -15,10 +15,10 @@
 #define LOG_WARNING_(fmt, ...)  loggeru::logger_t::log_warning(loggeru::logger_t::log_string_t(fmt, __FILE__, __LINE__, true), __VA_ARGS__)
 
 #define LOG_ERROR(msg)  loggeru::logger_t::log_error(loggeru::logger_t::log_string_t(msg, __FILE__, __LINE__, false))
-#define LOG_ERROR_(fmt, ...)  loggeru::loggeru::logger_t::log_error(loggeru::logger_t::log_string_t(fmt, __FILE__, __LINE__, true), __VA_ARGS__)
+#define LOG_ERROR_(fmt, ...)  loggeru::logger_t::log_error(loggeru::logger_t::log_string_t(fmt, __FILE__, __LINE__, true), __VA_ARGS__)
 
 #define LOG_CRITICAL(msg)  loggeru::logger_t::log_critical(loggeru::logger_t::log_string_t(msg, __FILE__, __LINE__, false))
-#define LOG_CRITICAL_(fmt, ...)  loggeru::loggeru::logger_t::log_critical(loggeru::logger_t::log_string_t(fmt, __FILE__, __LINE__, true), __VA_ARGS__)
+#define LOG_CRITICAL_(fmt, ...) loggeru::logger_t::log_critical(loggeru::logger_t::log_string_t(fmt, __FILE__, __LINE__, true), __VA_ARGS__)
 
 #define ASSERT(ptr) if (!(ptr)) {LOG_ERROR("ASSERTION FAILED:" #ptr " was nullptr/false\n"); return;}
 #define ASSERT_MSG(ptr, msg) if (!(ptr)) {LOG_ERROR(msg); throw;}
