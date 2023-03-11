@@ -2,8 +2,8 @@
 A Well rounded c++ Logging solution
 
 ## system dependencies
+- std++20 or higher
 - [fmt](https://github.com/fmtlib/fmt)
-- std++17 or higher. 
 - [**WINDOWS ONLY**] [vcpkg](https://vcpkg.io/en/index.html)
 
 > **Warning**
@@ -16,13 +16,13 @@ A Well rounded c++ Logging solution
 
 ## Installation
 1. Clone repo
-2. Configure project `mkdir out && cd out && cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DVCPKG_PATH="<non-default path to VCPKG>"`
+2. Configure project `mkdir out && cd out && cmake .. -DCMAKE_BUILD_TYPE=RELEASE (windows only: -DVCPKG_PATH="<non-default path to VCPKG>)"`
 3. build project `cmake --build .`
 5. install project `cmake --install .`
 
 > **Warning**
 > 
-> **For windows** the installation location will be in ${VCPKG_PATH}/installed/windows-${ARCHITECTURE}/
+> **For windows** the installation location will be in {VCPKG_PATH}/installed/windows-{ARCHITECTURE:(x64/x86)}
 >
 > **For UNIX** the installation location will be in the default platform library installtion location.
 
@@ -32,24 +32,24 @@ The library follows a near-identical coding standard to [dpp's coding standards]
 ## Usage
 ### Initialize the logger by calling:
 ```cpp
-Loggeru::Initialize();
+loggeru::logger::initialize();
 ```
 
 ### Enable file logging by calling:
 ```cpp
-Loggeru::StartFileLogging();
+loggeru::logger::start_file_logging();
 ```
 > **Note** <br>
 > default filename: `Log_{day}_{month}_{year}_{hours}_{minutes}_{seconds}.log`
 
 OR 
 ```cpp
-Loggeru::StartFileLogging("filename.log");
+loggeru::logger::start_file_logging("filename.log");
 ```
 
 ### Stop file logging by calling:
 ```cpp
-Loggeru::StopFileLogging();
+loggeru::logger::stop_file_logging();
 ```
 
 ### Log Messages by using macros:
@@ -64,11 +64,11 @@ LOG_CRITICAL("My critical error message"); //Will throw std::exception&
 Or use formatted equivalents by adding `_`<br>
 eg. 
 ```cpp
-std::string filepath = "some bad file path";
-LOG_CRITICAL_("Tried loading config file but file at path {} could not be found", filepath);
+std::string file_path = "some bad file path";
+LOG_CRITICAL_("Tried loading config file but file at path {} could not be found", file_path);
 ```
 
 ### Cleanup the logger by calling:
 ```cpp
-Loggeru::Release();
+loggeru::logger::release();
 ```
