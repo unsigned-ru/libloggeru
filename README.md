@@ -21,7 +21,7 @@ git clone https://github.com/unsigned-ru/libloggeru.git
 ```
 ### 2. Configure project
 ```
-cd libhaikhuu-ipc && 
+cd libloggeru && 
 mkdir out &&
 cd out &&
 cmake .. -DCMAKE_BUILD_TYPE=RELEASE (windows only: -DVCPKG_PATH="<non-default path to VCPKG>)"
