@@ -48,24 +48,24 @@ The library follows a near-identical coding standard to [dpp's coding standards]
 ## Usage
 ### Initialize the logger by calling:
 ```cpp
-loggeru::logger::initialize();
+loggeru::logger_t::initialize();
 ```
 
 ### Enable file logging by calling:
 ```cpp
-loggeru::logger::start_file_logging();
+loggeru::logger_t::start_file_logging();
 ```
 > **Note** <br>
 > default filename: `Log_{day}_{month}_{year}_{hours}_{minutes}_{seconds}.log`
 
 OR 
 ```cpp
-loggeru::logger::start_file_logging("filename.log");
+loggeru::logger_t::start_file_logging("filename.log");
 ```
 
 ### Stop file logging by calling:
 ```cpp
-loggeru::logger::stop_file_logging();
+loggeru::logger_t::stop_file_logging();
 ```
 
 ### Log Messages by using macros:
@@ -86,5 +86,5 @@ LOG_CRITICAL_("Tried loading config file but file at path {} could not be found"
 
 ### Cleanup the logger by calling:
 ```cpp
-loggeru::logger::release();
+loggeru::logger_t::release();
 ```
