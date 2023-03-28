@@ -1,6 +1,6 @@
 prefix=${pcfiledir}/../..
 exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
+libdir=${exec_prefix}/${@@PROJECT_NAME@_LIB_DIR_PREFIX@}lib
 includedir=${prefix}/include
 
 Name: @PROJECT_NAME@

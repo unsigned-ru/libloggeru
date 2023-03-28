@@ -1,12 +1,23 @@
-﻿cmake_minimum_required(VERSION 3.23)
+﻿###################
+## Project Setup ##
+###################
+cmake_minimum_required(VERSION 3.23)
 set(PROJECT_NAME "libloggeru")
 project(${PROJECT_NAME} LANGUAGES CXX VERSION 1.0.0)
 
 #stop cmake from prepending
 set(CMAKE_SHARED_LIBRARY_PREFIX "") 
 
+
 #build type option
 set(LIBRARY_BUILD_TYPE "SHARED" CACHE STRING "STATIC/SHARED")
+
+
+# Make lowercase variants of CMAKE variables as required
+# note: most of everything in this project is snake_case, following STLXX coding standards
+# therefore we want some of these to be snake_case too.
+string(TOLOWER ${CMAKE_SYSTEM_NAME} CMAKE_SYSTEM_NAME_TOLOWER) #eg. windows
+string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_TOLOWER) #eg. debug/release
 
 #################
 ## VCPKG SETUP ##
@@ -98,11 +109,16 @@ if (WIN32)
 		message(FATAL_ERROR "Failed to find VCPKG location to install to, CMake will exit." )
 	endif()
 
+	SET(${PROJECT_NAME}_LIB_DIR_PREFIX "")
+	if(${CMAKE_BUILD_TYPE_TOLOWER} STREQUAL "debug")
+		SET(${PROJECT_NAME}_LIB_DIR_PREFIX "debug/")
+	endif()
+	
 	install(TARGETS ${PROJECT_NAME} 
 		EXPORT ${PROJECT_NAME}-targets
-			LIBRARY DESTINATION lib
-			ARCHIVE DESTINATION lib
-			RUNTIME DESTINATION bin
+			LIBRARY DESTINATION ${${PROJECT_NAME}_LIB_DIR_PREFIX}
+			ARCHIVE DESTINATION ${${PROJECT_NAME}_LIB_DIR_PREFIX}lib
+			RUNTIME DESTINATION ${${PROJECT_NAME}_LIB_DIR_PREFIX}bin
 			FILE_SET HEADERS DESTINATION include
 	)
 
@@ -140,39 +156,3 @@ else()
 		DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 	)
 endif()
-
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-################
-## Unit Tests ##
-################
-## TODO: add unit tests
-#
-#set(PROJECT_UNIT_TEST_NAME ${PROJECT_NAME}_UnitTests)
-#
-#add_executable(${PROJECT_UNIT_TEST_NAME} 
-#	"unit-tests/Tests.cpp"
-#)
-#
-## link our library
-#target_link_libraries(${PROJECT_UNIT_TEST_NAME} PUBLIC ${PROJECT_NAME})
-#
-## add our library headers
-#target_include_directories(${PROJECT_UNIT_TEST_NAME} PUBLIC 
-#	"include"
-#)
-#
-#####################
-### Compiler Flags ##
-#####################
-#target_compile_options(${PROJECT_UNIT_TEST_NAME} PRIVATE
-#  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX /EHsc /std:c++20>
-#  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror -std=c++20>
-#)
-#
-#include(CTest)
-#add_test(
-#	NAME unittests
-#	COMMAND ${PROJECT_UNIT_TEST_NAME}
-#	WORKING_DIRECTORY unit-tests
-#)

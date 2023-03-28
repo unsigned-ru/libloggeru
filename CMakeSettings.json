@@ -9,7 +9,14 @@
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "LIBRARY_BUILD_TYPE",
+          "value": "STATIC",
+          "type": "STRING"
+        }
+      ]
     },
     {
       "name": "x64-Release",
