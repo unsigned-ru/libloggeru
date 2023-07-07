@@ -79,10 +79,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 ## Libs ##
 ##########
 
-#add FMT
-find_package(fmt CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
-
 
 ####################
 ## Compiler Flags ##

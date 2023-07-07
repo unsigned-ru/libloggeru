@@ -1,59 +1,84 @@
 ﻿{
   "configurations": [
     {
-      "name": "x64-Debug",
-      "generator": "Ninja",
+      "name": "Linux-GCC-Local-Debug",
+      "generator": "Unix Makefiles",
       "configurationType": "Debug",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "buildRoot": "${projectDir}\\out\\build\\${name}",
-      "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "",
+      "cmakeExecutable": "cmake",
+      "remoteCopySourcesExclusionList": [ ".vs", ".git", "out" ],
+      "cmakeCommandArgs": "-DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
+      "inheritEnvironments": [ "linux_x64" ],
+      "remoteMachineName": "196175322;192.168.0.110 (username=ru, port=22, authentication=Password)",
+      "remoteCMakeListsRoot": "$HOME/${projectDirName}/src",
+      "remoteBuildRoot": "$HOME/${projectDirName}/out/build/${name}",
+      "remoteCopySources": true,
+      "rsyncCommandArgs": "-t --delete",
+      "remoteCopyBuildOutput": false,
+      "remoteCopySourcesMethod": "rsync",
+      "intelliSenseMode": "linux-gcc-x64",
+      "remoteCopyAdditionalIncludeDirectories": [],
       "variables": [
         {
-          "name": "LIBRARY_BUILD_TYPE",
-          "value": "STATIC",
-          "type": "STRING"
+          "name": "BUILD_UNIT_TESTS",
+          "value": "True",
+          "type": "BOOL"
         }
       ]
     },
     {
-      "name": "x64-Release",
-      "generator": "Ninja",
-      "configurationType": "Release",
-      "buildRoot": "${projectDir}\\out\\build\\${name}",
-      "installRoot": "${projectDir}\\out\\install\\${name}",
-      "buildCommandArgs": "",
-      "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "intelliSenseMode": "windows-msvc-x64",
-      "variables": [
-        {
-          "name": "LIBRARY_BUILD_TYPE",
-          "value": "STATIC",
-          "type": "STRING"
-        }
-      ]
-    },
-    {
-      "name": "Linux-GCC-Release",
+      "name": "Linux-GCC-Local-Release",
       "generator": "Unix Makefiles",
       "configurationType": "Release",
       "cmakeExecutable": "cmake",
       "remoteCopySourcesExclusionList": [ ".vs", ".git", "out" ],
-      "cmakeCommandArgs": "",
+      "cmakeCommandArgs": "-DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "linux_x64" ],
-      "remoteMachineName": "870984854;192.168.0.172 (username=ru, port=22, authentication=Password)",
+      "intelliSenseMode": "linux-gcc-x64",
+      "remoteMachineName": "196175322;192.168.0.110 (username=ru, port=22, authentication=Password)",
       "remoteCMakeListsRoot": "$HOME/${projectDirName}/src",
       "remoteBuildRoot": "$HOME/${projectDirName}/out/build/${name}",
-      "remoteInstallRoot": "/usr/",
       "remoteCopySources": true,
       "rsyncCommandArgs": "-t --delete",
       "remoteCopyBuildOutput": false,
-      "remoteCopySourcesMethod": "rsync"
+      "remoteCopySourcesMethod": "rsync",
+      "remoteCopyAdditionalIncludeDirectories": [],
+      "variables": [
+        {
+          "name": "BUILD_UNIT_TESTS",
+          "value": "True",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "Linux-GCC-Remote-Release",
+      "generator": "Unix Makefiles",
+      "configurationType": "Release",
+      "cmakeExecutable": "cmake",
+      "remoteCopySourcesExclusionList": [ ".vs", ".git", "out" ],
+      "cmakeCommandArgs": "-DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "linux_x64" ],
+      "intelliSenseMode": "linux-gcc-x64",
+      "remoteMachineName": "-2050829079;206.189.233.132 (username=ru, port=22, authentication=Password)",
+      "remoteCMakeListsRoot": "$HOME/${projectDirName}/src",
+      "remoteBuildRoot": "$HOME/${projectDirName}/out/build/${name}",
+      "remoteCopySources": true,
+      "rsyncCommandArgs": "-t --delete",
+      "remoteCopyBuildOutput": false,
+      "remoteCopySourcesMethod": "rsync",
+      "remoteCopyAdditionalIncludeDirectories": [],
+      "variables": [
+        {
+          "name": "BUILD_UNIT_TESTS",
+          "value": "True",
+          "type": "BOOL"
+        }
+      ]
     }
   ]
 }

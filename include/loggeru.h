@@ -1,8 +1,9 @@
 #pragma once
 
+#include <cstdint>
 #include <map>
 #include <ostream>
-#include <fmt/format.h>
+#include <format>
 
 
 #define LOG_DEBUG(msg)  loggeru::logger_t::log_debug(loggeru::logger_t::log_string_t(msg, __FILE__, __LINE__, false))
@@ -115,7 +116,7 @@ namespace loggeru
 	private:
 		logger_t() = default;
 
-		static bool process_log(log_level level, const log_string_t& fmt, fmt::format_args args);
+		static bool process_log(log_level level, const log_string_t& fmt, std::format_args args);
 
 		static bool should_append_timestamp;
 
@@ -129,31 +130,31 @@ namespace loggeru
 	template <typename ...args_t>
 	void logger_t::log_info(const log_string_t& fmt, args_t&&... args)
 	{
-		process_log(ll_info, fmt, fmt::make_format_args(args...));
+		process_log(ll_info, fmt, std::make_format_args(args...));
 	}
 
 	template <typename ... args_t>
 	void logger_t::log_debug(const log_string_t& fmt, args_t&&... args)
 	{
-		process_log(ll_debug, fmt, fmt::make_format_args(args...));
+		process_log(ll_debug, fmt, std::make_format_args(args...));
 	}
 
 	template <typename ... args_t>
 	void logger_t::log_warning(const log_string_t& fmt, args_t&&... args)
 	{
-		process_log(ll_warning, fmt, fmt::make_format_args(args...));
+		process_log(ll_warning, fmt, std::make_format_args(args...));
 	}
 
 	template <typename ... args_t>
 	bool logger_t::log_error(const log_string_t& fmt, args_t&&... args)
 	{
-		return process_log(ll_error, fmt, fmt::make_format_args(args...));
+		return process_log(ll_error, fmt, std::make_format_args(args...));
 	}
 
 	template <typename ... args_t>
 	bool logger_t::log_critical(const log_string_t& fmt, args_t&&... args)
 	{
-		return process_log(ll_critical, fmt, fmt::make_format_args(args...));
+		return process_log(ll_critical, fmt, std::make_format_args(args...));
 	}
 
 }

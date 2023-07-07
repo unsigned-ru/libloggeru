@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <format>
 
 namespace fs = std::filesystem;
 
@@ -43,7 +44,7 @@ void loggeru::logger_t::base_logger_t::log(const std::string& message, bool appe
 		std::ignore = localtime_r(&tt, &now);
 #endif
 
-		const std::string time_stamp = fmt::format("[{:04}-{:02}-{:02} > {:02}:{:02}:{:02}] ", now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec);
+		const std::string time_stamp = std::format("[{:04}-{:02}-{:02} > {:02}:{:02}:{:02}] ", now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec);
 		(*os) << time_stamp;
 	}
 
@@ -98,7 +99,7 @@ void loggeru::logger_t::start_file_logging()
 	std::ignore = localtime_r(&tt, &time);
 #endif
 
-	start_file_logging(fmt::format("Log_{:02}-{:02}-{}_{:02}-{:02}-{:02}.log", time.tm_mday, time.tm_mon, time.tm_year, time.tm_hour, time.tm_min, time.tm_sec));
+	start_file_logging(std::format("Log_{:02}-{:02}-{}_{:02}-{:02}-{:02}.log", time.tm_mday, time.tm_mon, time.tm_year, time.tm_hour, time.tm_min, time.tm_sec));
 }
 
 void loggeru::logger_t::start_file_logging(const std::string& filename)
@@ -113,7 +114,7 @@ void loggeru::logger_t::stop_file_logging()
 	SAFE_DELETE(p_file_logger);
 }
 
-bool loggeru::logger_t::process_log(const log_level level, const log_string_t& fmt, const fmt::format_args args)
+bool loggeru::logger_t::process_log(const log_level level, const log_string_t& fmt, const std::format_args args)
 {
 	//Skip Debug message in release build
 #ifdef NDEBUG
@@ -121,18 +122,18 @@ bool loggeru::logger_t::process_log(const log_level level, const log_string_t& f
 #endif
 
 	//Generate Message
-	std::string log_msg = fmt.format ? fmt::vformat(fmt.message, args) : fmt.message; //DEFAULT FORMATTING
+	std::string log_msg = fmt.format ? std::vformat(fmt.message, args) : fmt.message; //DEFAULT FORMATTING
 
 	const auto filename = fs::path(fmt.file).filename().string();
 	const std::string level_string = level_strings[level];
 
-	const auto full_log = fmt::format("[{}] > {} (line {}) :: {}\n", level_string, filename, fmt.line, log_msg);
+	const auto full_log = std::format("[{}] > {} (line {}) :: {}\n", level_string, filename, fmt.line, log_msg);
 
 	//Console Log
 	if (p_console_logger)
 	{
 		const std::string& color_code = level_color_codes[level];
-		const auto color_log = fmt::format("[{}{}{}] > {} (line {}) :: {}\n", color_code, level_string, RST, filename, fmt.line, log_msg);
+		const auto color_log = std::format("[{}{}{}] > {} (line {}) :: {}\n", color_code, level_string, RST, filename, fmt.line, log_msg);
 		p_console_logger->log(color_log);
 	}
 
