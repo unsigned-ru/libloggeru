@@ -24,7 +24,7 @@ git clone https://github.com/unsigned-ru/libloggeru.git
 cd libloggeru && 
 mkdir out &&
 cd out &&
-cmake .. -DCMAKE_BUILD_TYPE=RELEASE (windows only: -DVCPKG_PATH="<non-default path to VCPKG>)"
+cmake .. -DCMAKE_BUILD_TYPE=<Debug/Release> -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13 (windows only: -DVCPKG_PATH="<non-default path to VCPKG>)"
 ```
 ### 3. Build project
 ```
