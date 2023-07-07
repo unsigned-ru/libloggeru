@@ -3,7 +3,7 @@ A well rounded c++ Logging solution
 
 ## Library Dependencies (installed as shared libraries on the system)
 - std++20 or higher
-- [fmt](https://github.com/fmtlib/fmt)
+- a compiler that supports std::format
 - [**WINDOWS ONLY**] [vcpkg](https://vcpkg.io/en/index.html)
 
 > **Warning**
