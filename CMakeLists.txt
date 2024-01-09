@@ -8,16 +8,13 @@ project(${PROJECT_NAME} LANGUAGES CXX VERSION 1.0.0)
 #stop cmake from prepending
 set(CMAKE_SHARED_LIBRARY_PREFIX "") 
 
+# Set the general CXX standard.
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
 
 #build type option
 set(LIBRARY_BUILD_TYPE "SHARED" CACHE STRING "STATIC/SHARED")
-
-
-# Make lowercase variants of CMAKE variables as required
-# note: most of everything in this project is snake_case, following STLXX coding standards
-# therefore we want some of these to be snake_case too.
-string(TOLOWER ${CMAKE_SYSTEM_NAME} CMAKE_SYSTEM_NAME_TOLOWER) #eg. windows
-string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_TOLOWER) #eg. debug/release
 
 #################
 ## VCPKG SETUP ##
@@ -45,8 +42,6 @@ if (WIN32)
 
 	set(CMAKE_INSTALL_PREFIX ${VCPKG_PATH}/installed/${ARCHITECTURE}-windows/)
 endif()
-
-
 
 ###########################
 ## Create Library Target ##
@@ -83,7 +78,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 find_package(fmt CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
 
-
 ####################
 ## Compiler Flags ##
 ####################
@@ -105,15 +99,18 @@ write_basic_package_version_file(
 )
 
 if (WIN32)
+	#if VCPKG not found, don't continue
 	if (NOT EXISTS ${VCPKG_PATH})
 		message(FATAL_ERROR "Failed to find VCPKG location to install to, CMake will exit." )
 	endif()
 
+	#set the LIB_DIR_PREFIX to debug if we are building for debug, (release is no prefix)
 	SET(${PROJECT_NAME}_LIB_DIR_PREFIX "")
-	if(${CMAKE_BUILD_TYPE_TOLOWER} STREQUAL "debug")
+	if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 		SET(${PROJECT_NAME}_LIB_DIR_PREFIX "debug/")
 	endif()
 	
+	# install the library files in the correct destinations
 	install(TARGETS ${PROJECT_NAME} 
 		EXPORT ${PROJECT_NAME}-targets
 			LIBRARY DESTINATION ${${PROJECT_NAME}_LIB_DIR_PREFIX}
@@ -122,9 +119,11 @@ if (WIN32)
 			FILE_SET HEADERS DESTINATION include
 	)
 
+	# create the package config file and install it in the correct location
 	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}-vcpkg.pc.in" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" @ONLY)
 	install(FILES "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION "lib/pkgconfig")
 
+	# create the targets.cmake file and place it in the correct dir
 	install(EXPORT ${PROJECT_NAME}-targets
 		FILE ${PROJECT_NAME}-targets.cmake
 		NAMESPACE libloggeru::
